@@ -1,138 +1,109 @@
+import json
+import os
+
 expenses = []
 income = []
 
+def load_data():
+    global income, expenses
+    if os.path.exists("expenses.json"):
+        try:
+            with open("expenses.json", "r") as f:
+                data = json.load(f)
+                income = data.get("income", [])
+                expenses = data.get("expenses", [])
+        except Exception:
+            income = []
+            expenses = []
+
+def save_data():
+    with open("expenses.json", "w") as f:
+        json.dump({"income": income, "expenses": expenses}, f, indent=4)
+
+load_data()
 
 def show_menu():
-    print("\n" + "=" * 50)
-    print("              ExpenseTracker+ 💰")
-    print("                 Version 1.1")
-    print("=" * 50)
+    print("\n" + "="*45)
+    print("        ExpenseTracker+ ð°")
+    print("="*45)
     print("1. Add Income")
     print("2. Add Expense")
     print("3. View Transactions")
     print("4. Financial Health Score")
     print("5. Exit")
-    print("=" * 50)
-
+    print("="*45)
 
 while True:
     show_menu()
-
     choice = input("Enter your choice: ")
 
     if choice == "1":
         try:
-            amount = float(input("Enter income amount (₹): "))
-            source = input("Enter income source: ")
-
-            income.append({
-                "amount": amount,
-                "source": source
-            })
-
-            print("\n✅ Income added successfully!")
-
+            amount = float(input("Income Amount: â¹"))
+            source = input("Income Source: ")
+            income.append({"amount": amount, "source": source})
+            save_data()
+            print("â Income added.")
         except ValueError:
-            print("\n❌ Please enter a valid amount.")
+            print("â Invalid amount.")
 
     elif choice == "2":
         try:
-            amount = float(input("Enter expense amount (₹): "))
-            category = input("Enter category: ")
-            description = input("Enter description: ")
-
-            print("\nSelect your mood while spending")
-            print("1. Happy 😊")
-            print("2. Sad 😔")
-            print("3. Stressed 😣")
-            print("4. Excited 🤩")
-            print("5. Normal 🙂")
-
-            mood_choice = input("Enter mood (1-5): ")
-
-            moods = {
-                "1": "Happy",
-                "2": "Sad",
-                "3": "Stressed",
-                "4": "Excited",
-                "5": "Normal"
-            }
-
-            mood = moods.get(mood_choice, "Unknown")
-
+            amount = float(input("Expense Amount: â¹"))
+            category = input("Category: ")
+            description = input("Description: ")
+            print("Mood: 1.Happy 2.Sad 3.Stressed 4.Excited 5.Normal")
+            mood = {"1":"Happy","2":"Sad","3":"Stressed","4":"Excited","5":"Normal"}.get(input("Choose: "), "Unknown")
             expenses.append({
                 "amount": amount,
                 "category": category,
                 "description": description,
                 "mood": mood
             })
-
-            print("\n✅ Expense added successfully!")
-
+            save_data()
+            print("â Expense added.")
         except ValueError:
-            print("\n❌ Please enter a valid amount.")
+            print("â Invalid amount.")
 
     elif choice == "3":
-
-        print("\n" + "=" * 50)
-        print("            TRANSACTION HISTORY")
-        print("=" * 50)
-
-        if len(income) == 0:
-            print("\nNo income records.")
+        print("\n--- Income ---")
+        if income:
+            for i,x in enumerate(income,1):
+                print(f"{i}. â¹{x['amount']} | {x['source']}")
         else:
-            print("\n------ Income ------")
-            for i, item in enumerate(income, start=1):
-                print(f"{i}. ₹{item['amount']} | Source: {item['source']}")
-
-        if len(expenses) == 0:
-            print("\nNo expense records.")
+            print("No income.")
+        print("\n--- Expenses ---")
+        if expenses:
+            for i,x in enumerate(expenses,1):
+                print(f"{i}. â¹{x['amount']} | {x['category']} | {x['description']} | {x['mood']}")
         else:
-            print("\n------ Expenses ------")
-            for i, item in enumerate(expenses, start=1):
-                print(f"{i}. ₹{item['amount']}")
-                print(f"   Category    : {item['category']}")
-                print(f"   Description : {item['description']}")
-                print(f"   Mood        : {item['mood']}")
-                print("-" * 40)
-
-        total_income = sum(item["amount"] for item in income)
-        total_expense = sum(item["amount"] for item in expenses)
-        balance = total_income - total_expense
-
-        print("\n" + "=" * 50)
-        print(f"Total Income   : ₹{total_income:.2f}")
-        print(f"Total Expense  : ₹{total_expense:.2f}")
-        print(f"Current Balance: ₹{balance:.2f}")
-        print("=" * 50)
+            print("No expenses.")
+        ti = sum(x["amount"] for x in income)
+        te = sum(x["amount"] for x in expenses)
+        print(f"\nTotal Income: â¹{ti:.2f}")
+        print(f"Total Expense: â¹{te:.2f}")
+        print(f"Balance: â¹{ti-te:.2f}")
 
     elif choice == "4":
-
-        total_income = sum(item["amount"] for item in income)
-        total_expense = sum(item["amount"] for item in expenses)
-
-        if total_income == 0:
-            print("\n⚠ Please add income first.")
+        ti = sum(x["amount"] for x in income)
+        te = sum(x["amount"] for x in expenses)
+        if ti == 0:
+            print("Please add income first.")
         else:
-            score = ((total_income - total_expense) / total_income) * 100
-
-            print("\n========== FINANCIAL HEALTH ==========")
-
+            score = ((ti-te)/ti)*100
+            print(f"Health Score: {score:.2f}%")
             if score >= 80:
-                print("🟢 Excellent Financial Health")
+                print("ð¢ Excellent")
             elif score >= 60:
-                print("🟡 Good Financial Health")
+                print("ð¡ Good")
             elif score >= 40:
-                print("🟠 Average Financial Health")
+                print("ð  Average")
             else:
-                print("🔴 Poor Financial Health")
-
-            print(f"Health Score : {score:.2f}%")
-            print(f"Balance      : ₹{total_income - total_expense:.2f}")
+                print("ð´ Poor")
 
     elif choice == "5":
-        print("\n👋 Thank you for using ExpenseTracker+!")
+        print("Thank you for using ExpenseTracker+!")
         break
-
     else:
-        print("\n❌ Invalid choice! Please enter a number between 1 and 5.")
+        print("Invalid choice.")
+            
