@@ -2,6 +2,7 @@ import json
 import os
 from analytics import show_analytics
 from budget import set_budget, show_budget
+from charts import expense_pie_chart, expense_bar_chart
 expenses = []
 income = []
 
@@ -46,7 +47,9 @@ def show_menu():
     print("5. Analytics Dashboard")
     print("6. Set Monthly Budget")
     print("7. View Budget")
-    print("8. Exit")
+    print("8. Expense Pie Chart")
+    print("9. Expense Bar Chart")
+    print("10. Exit")
     print("=" * 45)
 
 
@@ -194,8 +197,14 @@ while True:
        show_budget(budget, expenses)
 
     elif choice == "8":
-       print("\n👋 Thank you for using ExpenseTracker+!")
-       break
+       expense_pie_chart(expenses)
+
+    elif choice == "9":
+       expense_bar_chart(expenses)
+
+    elif choice == "10":
+        print("\n👋 Thank you for using ExpenseTracker+!")
+        break
 
 else:
-    print("\n❌ Invalid choice! Please enter a number between 1 and 8.")
+    print("\n❌ Invalid choice! Please enter a number between 1 and 10.")
