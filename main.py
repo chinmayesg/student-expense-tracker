@@ -1,7 +1,7 @@
 import json
 import os
 from analytics import show_analytics
-
+from budget import set_budget, show_budget
 expenses = []
 income = []
 
@@ -33,7 +33,7 @@ def save_data():
 
 
 load_data()
-
+budget = 0
 
 def show_menu():
     print("\n" + "=" * 45)
@@ -44,7 +44,9 @@ def show_menu():
     print("3. View Transactions")
     print("4. Financial Health Score")
     print("5. Analytics Dashboard")
-    print("6. Exit")
+    print("6. Set Monthly Budget")
+    print("7. View Budget")
+    print("8. Exit")
     print("=" * 45)
 
 
@@ -186,12 +188,14 @@ while True:
         show_analytics(income, expenses)
 
     elif choice == "6":
+       budget = set_budget()
 
-        print("\n👋 Thank you for using ExpenseTracker+!")
-        break
+    elif choice == "7":
+       show_budget(budget, expenses)
 
-    else:
+    elif choice == "8":
+       print("\n👋 Thank you for using ExpenseTracker+!")
+       break
 
-        print("\n❌ Invalid choice! Please enter a number between 1 and 6.")
-
-            
+else:
+    print("\n❌ Invalid choice! Please enter a number between 1 and 8.")

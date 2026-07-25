@@ -3,6 +3,14 @@
         {
             "amount": 3000.0,
             "source": "dad"
+        },
+        {
+            "amount": 10000.0,
+            "source": "pocket money"
+        },
+        {
+            "amount": 10000.0,
+            "source": "food"
         }
     ],
     "expenses": [
@@ -11,6 +19,12 @@
             "category": "food",
             "description": "breakfast and lunch",
             "mood": "Normal"
+        },
+        {
+            "amount": 2500.0,
+            "category": "food",
+            "description": "lunch",
+            "mood": "Happy"
         }
     ]
 }
