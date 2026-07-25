@@ -3,6 +3,7 @@ import os
 from analytics import show_analytics
 from budget import set_budget, show_budget
 from charts import expense_pie_chart, expense_bar_chart
+from advisor import smart_spending_advisor
 expenses = []
 income = []
 
@@ -49,7 +50,8 @@ def show_menu():
     print("7. View Budget")
     print("8. Expense Pie Chart")
     print("9. Expense Bar Chart")
-    print("10. Exit")
+    print("10. Smart Spending Advisor")
+    print("11. Exit")
     print("=" * 45)
 
 
@@ -203,8 +205,11 @@ while True:
        expense_bar_chart(expenses)
 
     elif choice == "10":
-        print("\n👋 Thank you for using ExpenseTracker+!")
-        break
+       smart_spending_advisor(income, expenses)
+
+    elif choice == "11":
+       print("\n👋 Thank you for using ExpenseTracker+!")
+       break
 
 else:
-    print("\n❌ Invalid choice! Please enter a number between 1 and 10.")
+    print("\n❌ Invalid choice! Please enter a number between 1 and 11.")
