@@ -1,5 +1,16 @@
 {
-    "budget": 0,
-    "income": [],
-    "expenses": []
+    "income": [
+        {
+            "amount": 3000.0,
+            "source": "dad"
+        }
+    ],
+    "expenses": [
+        {
+            "amount": 2000.0,
+            "category": "food",
+            "description": "breakfast and lunch",
+            "mood": "Normal"
+        }
+    ]
 }
