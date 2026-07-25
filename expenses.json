@@ -1,4 +1,5 @@
 {
-  "income": [],
-  "expenses": []
+    "budget": 0,
+    "income": [],
+    "expenses": []
 }
