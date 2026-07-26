@@ -1,19 +1,25 @@
 import json
 import os
+from datetime import datetime
 from analytics import show_analytics
 from budget import set_budget, show_budget
 from charts import expense_pie_chart, expense_bar_chart
 from advisor import smart_spending_advisor
+from auth import register_user, login_user, change_password
+from search import search_transactions
+
 expenses = []
 income = []
 
 
-def load_data():
+def load_data(username):
     global income, expenses
 
-    if os.path.exists("expenses.json"):
+    filename = f"{username}_expenses.json"
+
+    if os.path.exists(filename):
         try:
-            with open("expenses.json", "r") as f:
+            with open(filename, "r") as f:
                 data = json.load(f)
                 income = data.get("income", [])
                 expenses = data.get("expenses", [])
@@ -22,8 +28,10 @@ def load_data():
             expenses = []
 
 
-def save_data():
-    with open("expenses.json", "w") as f:
+def save_data(username):
+    filename = f"{username}_expenses.json"
+
+    with open(filename, "w") as f:
         json.dump(
             {
                 "income": income,
@@ -34,9 +42,32 @@ def save_data():
         )
 
 
-load_data()
-budget = 0
 
+budget = 0
+current_user = None
+
+while current_user is None:
+    print("\n========== WELCOME ==========")
+    print("1. Login")
+    print("2. Create Account")
+    print("3. Exit")
+
+    option = input("Enter your choice: ")
+
+    if option == "1":
+        current_user = login_user()
+        if current_user:
+            load_data(current_user)
+    elif option == "2":
+        register_user()
+        print("\nPlease login with your new account.\n")
+        current_user = login_user()
+    elif option == "3":
+        print("Goodbye!")
+        exit()
+
+    else:
+        print("Invalid choice!")
 def show_menu():
     print("\n" + "=" * 45)
     print("        ExpenseTracker+ 💰")
@@ -51,7 +82,9 @@ def show_menu():
     print("8. Expense Pie Chart")
     print("9. Expense Bar Chart")
     print("10. Smart Spending Advisor")
-    print("11. Exit")
+    print("11. Search Transaction")
+    print("12. Change Password")
+    print("13. Exit")
     print("=" * 45)
 
 
@@ -69,11 +102,13 @@ while True:
             source = input("Income Source: ")
 
             income.append({
-                "amount": amount,
-                "source": source
-            })
+             "amount": amount,
+            "source": source,
+            "date": datetime.now().strftime("%d-%m-%Y"),
+            "time": datetime.now().strftime("%I:%M %p")
+        })
 
-            save_data()
+            save_data(current_user)
 
             print("\n✅ Income Added Successfully!")
 
@@ -110,10 +145,12 @@ while True:
                 "amount": amount,
                 "category": category,
                 "description": description,
-                "mood": mood
-            })
+                "mood": mood,
+                "date": datetime.now().strftime("%d-%m-%Y"),
+                "time": datetime.now().strftime("%I:%M %p")
+        })
 
-            save_data()
+            save_data(current_user)
 
             print("\n✅ Expense Added Successfully!")
 
@@ -208,8 +245,14 @@ while True:
        smart_spending_advisor(income, expenses)
 
     elif choice == "11":
-       print("\n👋 Thank you for using ExpenseTracker+!")
-       break
+       search_transactions(income, expenses)
+
+    elif choice == "12":
+        change_password()
+
+    elif choice == "13":
+        print("\n👋 Thank you for using ExpenseTracker+!")
+        break
 
 else:
-    print("\n❌ Invalid choice! Please enter a number between 1 and 11.")
+    print("\n❌ Invalid choice! Please enter a number between 1 and 13.")
