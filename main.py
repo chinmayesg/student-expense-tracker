@@ -1,6 +1,8 @@
 import json
 import os
 from datetime import datetime
+if not os.path.exists("data"):
+    os.makedirs("data")
 from analytics import show_analytics
 from budget import set_budget, show_budget
 from charts import expense_pie_chart, expense_bar_chart
@@ -15,8 +17,7 @@ income = []
 def load_data(username):
     global income, expenses
 
-    filename = f"{username}_expenses.json"
-
+    filename = os.path.join("data", f"{username}_expenses.json")
     if os.path.exists(filename):
         try:
             with open(filename, "r") as f:
@@ -29,7 +30,7 @@ def load_data(username):
 
 
 def save_data(username):
-    filename = f"{username}_expenses.json"
+    filename = os.path.join("data", f"{username}_expenses.json")
 
     with open(filename, "w") as f:
         json.dump(
