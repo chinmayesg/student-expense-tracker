@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">
+        💰 ExpenseTracker+
+    </div>
+
+    <h2>Welcome {{ username }}</h2>
+
+    <p class="subtitle">
+        Your dashboard is ready.
+    </p>
+
+    <button>Add Income</button>
+    <button>Add Expense</button>
+    <button>View Transactions</button>
+    <button>Analytics</button>
+
+</div>
+
+</body>
+</html>

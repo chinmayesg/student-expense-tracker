@@ -23,19 +23,19 @@ def save_users(data):
         json.dump(data, file, indent=4)
 
 
-def register_user():
+def register_user(username, password):
     users_data = load_users()
 
     print("\n========== CREATE ACCOUNT ==========")
 
-    username = input("Enter username: ")
+    
 
     for user in users_data["users"]:
         if user["username"] == username:
             print("❌ Username already exists.")
             return None
 
-    password = input("Enter password: ")
+    
 
     new_user = {
         "username": username,
@@ -51,41 +51,22 @@ def register_user():
     return username
 
 
-def login_user():
+def login_user(username, password):
     users_data = load_users()
 
-    print("\n========== LOGIN ==========")
-
-    username = input("Username: ")
-    password = input("Password: ")
-
+    # Hash the entered password
     hashed_password = hash_password(password)
 
+    # Check username and password
     for user in users_data["users"]:
-        if user["username"] == username and user["password"] == hashed_password:
-            print("✅ Login successful!")
+        if (
+            user["username"] == username
+            and user["password"] == hashed_password
+        ):
             return username
 
-    
-    print("\n❌ Invalid username or password.")
-    print("1. Try Again")
-    print("2. Forgot Password")
-    print("3. Back to Welcome Menu")
-
-    choice = input("Enter your choice: ")
-    if choice == "1":
-       return login_user()
-
-    elif choice == "2":
-       forgot_password()
-       return login_user()
-
-    elif choice == "3":
-       return None
-
-    else:
-       print("❌ Invalid choice.")
-       return None
+    # Login failed
+    return None
 
 def forgot_password():
     users_data = load_users()
